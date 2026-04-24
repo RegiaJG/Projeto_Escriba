@@ -17,7 +17,7 @@ from reportlab.pdfgen import canvas
 load_dotenv()
 
 # 1. API KEY DO GEMINI  (já utilizada anteriormente)
-API_KEY_GEMINI = os.getenv("GEMINI_API_KEY", "AIzaSyCqoTybu6DEPTlfQBl29fhROB3imcGzjyU").strip()
+API_KEY_GEMINI = os.getenv("GEMINI_API_KEY", "****************************************").strip()
 
 # 3. Instrução de sistema para o GEMINI (resumo em tópicos)
 SYSTEM_INSTRUCTION = """
