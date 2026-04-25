@@ -34,7 +34,7 @@
 - [Como Usar](#️-como-usar)
 - [Estrutura do Projeto](#-estrutura-do-projeto)
 - [Roadmap](#️-roadmap)
-- [Autor](#️-autor)
+- [Autor](#-autor)
 
 ---
 
@@ -298,7 +298,7 @@ escriba/
 
 ---
 
-## 👨‍💻 Autor
+## 👤 Autor
 
 <div align="center">
 
