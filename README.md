@@ -28,13 +28,13 @@
 - [Demonstração](#-demonstração)
 - [Funcionalidades](#-funcionalidades)
 - [Pipeline Técnico](#-pipeline-técnico)
-- [Tecnologias Utilizadas](#-tecnologias-utilizadas)
+- [Tecnologias Utilizadas](#️-tecnologias-utilizadas)
 - [Pré-requisitos](#-pré-requisitos)
 - [Instalação](#-instalação)
-- [Como Usar](#-como-usar)
+- [Como Usar](#️-como-usar)
 - [Estrutura do Projeto](#-estrutura-do-projeto)
-- [Roadmap](#-roadmap)
-- [Autor](#-autor)
+- [Roadmap](#️-roadmap)
+- [Autor](#️-autor)
 
 ---
 
