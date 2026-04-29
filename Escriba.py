@@ -8,6 +8,7 @@ Forge by Lucas Costa Nogueira
 import os
 import re
 import json
+import time
 import threading
 import difflib
 from datetime import datetime
@@ -30,7 +31,7 @@ from reportlab.lib import colors
 OLLAMA_URL        = "http://localhost:11434/api/generate"
 AUDIO_EXTENSIONS  = {".mp3", ".wav", ".m4a", ".ogg", ".flac"}
 WHISPER_MODELS    = ["tiny", "base", "small", "medium", "large"]
-OLLAMA_MODELS     = ["llama3.2", "llama3", "mistral", "gemma2", "phi4", "llama3.1"]
+OLLAMA_MODELS     = ["qwen2.5:7b", "llama3.1:8b", "llama3.2", "mistral", "gemma2", "phi4"]
 
 PURPLE            = "#7B2FBE"
 PURPLE_HOV        = "#9B4FDE"
@@ -43,6 +44,12 @@ PROJECTS_DIR      = os.path.join(BASE_DIR, "projects")
 
 MAX_CORRECTIONS_IN_PROMPT = 15
 
+
+def cmd_log(msg: str):
+    ts = datetime.now().strftime("%H:%M:%S")
+    print(f"[ESCRIBA {ts}] {msg}", flush=True)
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 #  BUILT-IN PROFILES
 # ══════════════════════════════════════════════════════════════════════════════
@@ -54,14 +61,54 @@ BUILT_IN_PROFILES = [
         "description": "Pauta, decisões, responsáveis e próximos passos",
         "icon": "👥",
         "editable": False,
-        "persona": "Você é um assistente especialista em resumir reuniões corporativas em português do Brasil.",
+        "persona": (
+            "Você é um assistente especialista em redigir atas e resumos de reuniões corporativas "
+            "em português do Brasil. Sua prioridade absoluta é a completude: todo assunto discutido "
+            "na reunião deve aparecer documentado no resultado."
+        ),
         "instructions": (
-            "Crie um resumo organizado com as seções abaixo. Omita seções que não se aplicarem.\n\n"
-            "1. Título descritivo da reunião\n"
-            "2. \"📋 Visão Geral\" — 2 a 5 frases contextualizando a reunião\n"
-            "3. \"📌 Pontos Principais\" — bullet points dos assuntos discutidos\n"
-            "4. \"✅ Decisões e Ações\" — decisões tomadas e seus responsáveis\n"
-            "5. \"🎯 Próximos Passos\" — tarefas e prazos mencionados"
+            "Siga os 3 PASSOS abaixo com base na TRANSCRIÇÃO COMPLETA acima.\n\n"
+            "PASSO 0 — LEITURA CRONOLÓGICA (obrigatório antes de qualquer outro passo)\n"
+            "Percorra a transcrição do INÍCIO ao FIM, identificando cada momento em que o assunto muda.\n"
+            "Prestando atenção especial a: abertura da reunião, transições de tema, discussões técnicas ou financeiras, questões jurídicas e os minutos finais.\n"
+            "Não avance para o PASSO 1 sem ter coberto a transcrição inteira.\n\n"
+            "PASSO 1 — MAPEAMENTO DE TÓPICOS\n"
+            "Com base na leitura do PASSO 0, liste TODOS os assuntos discutidos, um por linha.\n"
+            "- Inclua pauta formal E assuntos surgidos organicamente\n"
+            "- Inclua OBRIGATORIAMENTE: datas e prazos mencionados, modelos de negócio ou monetização, infraestrutura técnica e ferramentas, questões jurídicas ou de propriedade intelectual, transições de responsabilidade entre membros\n"
+            "- Cubra INÍCIO, MEIO e FIM da transcrição — não apenas a parte final\n"
+            "- Mínimo 8 itens. Reuniões longas: liste 12 ou mais.\n"
+            "Exemplo de formato:\n"
+            "- Recrutamento de novos membros\n"
+            "- Status do membro ausente\n"
+            "- Decisão sobre projeto criativo\n"
+            "(continue até cobrir todos)\n\n"
+            "PASSO 2 — ATA COMPLETA\n"
+            "Usando a lista do PASSO 1, preencha a ata abaixo.\n"
+            "Crie um bloco ### para CADA item da lista — nunca agrupe dois assuntos distintos.\n\n"
+            "# [Título descritivo da reunião]\n\n"
+            "## 👥 Participantes\n"
+            "[Nomes identificados na transcrição]\n\n"
+            "## 📋 Visão Geral\n"
+            "[2 a 4 frases sobre objetivo e resultado geral da reunião]\n\n"
+            "## 📌 Tópicos Discutidos\n\n"
+            "### [Assunto 1 da lista]\n"
+            "[Pontos debatidos, propostas e argumentos relevantes]\n\n"
+            "### [Assunto 2 da lista]\n"
+            "[Pontos debatidos, propostas e argumentos relevantes]\n\n"
+            "[Continue para TODOS os assuntos listados no PASSO 1]\n\n"
+            "## ✅ Decisões Tomadas\n"
+            "- [O que foi decidido] — [quem decidiu ou aprovou]\n\n"
+            "## 👤 Responsabilidades\n"
+            "- [Nome]: [tarefa ou responsabilidade]\n\n"
+            "## 🎯 Próximos Passos\n"
+            "- [tarefa, prazo ou compromisso]\n\n"
+            "REGRAS:\n"
+            "1. Complete os TRÊS passos na ordem — o mapeamento aparece antes da ata\n"
+            "2. Um ### por assunto, nunca dois assuntos num mesmo bloco\n"
+            "3. Preserve nomes, números, datas e ferramentas exatamente como ditos; corrija alucinações óbvias da transcrição usando o contexto ao redor\n"
+            "4. Prefira completo e longo a curto e incompleto\n"
+            "5. Se um trecho da transcrição parecer corrompido ou sem sentido, use o contexto para inferir o termo real antes de documentar"
         ),
     },
     {
@@ -74,7 +121,7 @@ BUILT_IN_PROFILES = [
         "instructions": (
             "Crie um resumo organizado. Omita seções que não se aplicarem.\n\n"
             "1. Título e participantes identificados\n"
-            "2. \"🎯 Tema Central\" — 1 a 3 frases\n"
+            "2. \"🎯 Tema Central\" — descreva o tema central com o que for necessário\n"
             "3. \"💬 Principais Tópicos\" — bullet points\n"
             "4. \"💡 Insights e Opiniões Relevantes\" — frases marcantes\n"
             "5. \"📌 Conclusões\""
@@ -155,7 +202,9 @@ def bootstrap():
     os.makedirs(PROJECTS_DIR, exist_ok=True)
     for p in BUILT_IN_PROFILES:
         path = os.path.join(PROFILES_DIR, f"{p['id']}.json")
-        if not os.path.exists(path):
+        # Sempre sobrescreve perfis não-editáveis para manter instruções atualizadas.
+        # Perfis editáveis (ex: personalizado) só são criados se ainda não existirem.
+        if not p.get("editable", False) or not os.path.exists(path):
             _write_json(path, p)
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -300,61 +349,103 @@ def update_task(project_id: str, task_id: str, **kwargs) -> None:
 # ══════════════════════════════════════════════════════════════════════════════
 
 def transcrever_audio(audio_path: str, modelo_whisper, log) -> Optional[str]:
-    log(f"🎙️  Transcrevendo: {os.path.basename(audio_path)}...")
+    nome = os.path.basename(audio_path)
+    log(f"🎙️  Transcrevendo: {nome}...")
+    cmd_log(f"WHISPER START → {nome}")
+    t0 = time.time()
+    done_evt = threading.Event()
+
+    def _heartbeat():
+        while not done_evt.wait(timeout=30):
+            elapsed = int(time.time() - t0)
+            msg = f"⏱️  Whisper rodando... {elapsed // 60}m{elapsed % 60:02d}s (aguarde)"
+            log(msg)
+            cmd_log(msg)
+
+    threading.Thread(target=_heartbeat, daemon=True).start()
     try:
         result = modelo_whisper.transcribe(audio_path, language="pt")
         texto = (result.get("text") or "").strip()
+        elapsed = int(time.time() - t0)
         if texto:
-            log("✅  Transcrição concluída.")
+            msg = f"✅  Transcrição concluída em {elapsed // 60}m{elapsed % 60:02d}s  ({len(texto)} caracteres)"
+            log(msg)
+            cmd_log(msg)
             return texto
         log("⚠️  Whisper não retornou texto.")
+        cmd_log("WHISPER WARNING → texto vazio")
         return None
     except Exception as e:
         log(f"❌  Erro na transcrição: {e}")
+        cmd_log(f"WHISPER ERROR → {e}")
         return None
+    finally:
+        done_evt.set()
 
 
 def build_prompt(profile: dict, transcricao: str, contexto: str, corrections: list) -> str:
     parts = [profile.get("persona", ""), ""]
     parts.append(
-        "IMPORTANTE: Esta transcrição foi gerada automaticamente pelo Whisper e pode conter "
-        "erros, palavras trocadas ou alucinações. Interprete o texto com senso crítico e "
+        "AVISO: Esta transcrição foi gerada automaticamente pelo Whisper e pode conter "
+        "erros, palavras trocadas ou alucinações. Interprete com senso crítico e "
         "corrija erros óbvios usando o contexto fornecido."
     )
     if corrections:
         recent = corrections[-MAX_CORRECTIONS_IN_PROMPT:]
         examples = "\n".join(f'  • "{c["original"]}" → "{c["corrected"]}"' for c in recent)
-        parts.append(f"\nCorreções registradas para este projeto (aplique ao encontrar os mesmos termos):\n{examples}")
+        parts.append(f"\nCorreções registradas para este projeto:\n{examples}")
     if contexto.strip():
         parts.append(f"\nContexto do projeto:\n{contexto.strip()}")
+    # Transcrição antes das instruções: modelos pequenos retêm melhor o formato
+    # quando as diretivas ficam próximas do ponto de geração.
+    parts.append(f"\nTRANSCRIÇÃO COMPLETA:\n\"\"\"\n{transcricao}\n\"\"\"")
     parts.append(f"\n{profile.get('instructions', '')}")
-    parts.append(f"\nTRANSCRIÇÃO:\n\"\"\"{transcricao}\"\"\"")
     parts.append("\nRESULTADO:")
     return "\n".join(parts)
 
 
 def gerar_resultado(transcricao: str, profile: dict, contexto: str,
                      corrections: list, ollama_model: str, log) -> Optional[str]:
-    log(f"🧠  Processando com {ollama_model}  |  Perfil: {profile.get('name', '?')}")
+    profile_name = profile.get("name", "?")
+    log(f"🧠  Processando com {ollama_model}  |  Perfil: {profile_name}")
+    cmd_log(f"OLLAMA START → model={ollama_model} | perfil={profile_name}")
+    t0 = time.time()
     try:
         prompt = build_prompt(profile, transcricao, contexto, corrections)
+        cmd_log(f"OLLAMA PROMPT → {len(prompt)} caracteres enviados")
         resp = requests.post(
             OLLAMA_URL,
-            json={"model": ollama_model, "prompt": prompt, "stream": False},
-            timeout=300,
+            json={
+                "model": ollama_model,
+                "prompt": prompt,
+                "stream": False,
+                "options": {
+                    "num_predict": -1,
+                    "num_ctx": 32768,
+                    "temperature": 0.3,
+                },
+            },
+            timeout=600,
         )
         resp.raise_for_status()
         resultado = resp.json().get("response", "").strip()
+        elapsed = int(time.time() - t0)
         if resultado:
-            log("✅  Resultado gerado.")
+            msg = f"✅  Resultado gerado em {elapsed // 60}m{elapsed % 60:02d}s  ({len(resultado)} caracteres)"
+            log(msg)
+            cmd_log(msg)
             return resultado
         log("⚠️  Ollama retornou resposta vazia.")
+        cmd_log(f"OLLAMA WARNING → resposta vazia após {elapsed}s")
         return None
     except requests.ConnectionError:
         log("❌  Ollama não está rodando. Execute: ollama serve")
+        cmd_log("OLLAMA ERROR → conexão recusada (ollama serve?)")
         return None
     except Exception as e:
+        elapsed = int(time.time() - t0)
         log(f"❌  Erro ao gerar resultado: {e}")
+        cmd_log(f"OLLAMA ERROR → {e} (após {elapsed}s)")
         return None
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -460,6 +551,7 @@ class EscribaApp(ctk.CTk):
         container.place(relx=0, rely=0, relwidth=1, relheight=1)
 
         self._frames = {
+            "splash":     SplashFrame(container, self),
             "projects":   ProjectsFrame(container, self),
             "work":       WorkFrame(container, self),
             "processing": ProcessingFrame(container, self),
@@ -468,7 +560,7 @@ class EscribaApp(ctk.CTk):
         for f in self._frames.values():
             f.place(relx=0, rely=0, relwidth=1, relheight=1)
 
-        self.show_frame("projects")
+        self.show_frame("splash")
 
     def show_frame(self, name: str, **kwargs):
         frame = self._frames[name]
@@ -492,6 +584,147 @@ class EscribaApp(ctk.CTk):
     def navigate_to_review(self, result: dict):
         self._task_result = result
         self.show_frame("review")
+
+
+# ── Splash Frame ─────────────────────────────────────────────────────────────
+
+class SplashFrame(ctk.CTkFrame):
+    _TITLE   = "ESCRIBA"
+    _TAGLINE = "Transcrição & Sumarização de Áudios com IA 100% Local"
+    _PIPELINE = "🎙   Whisper   →   🧠   Ollama   →   📄   PDF"
+    _TIPS = [
+        "  1.  Crie ou abra um projeto",
+        "  2.  Escolha o perfil de agente para o tipo de conteúdo",
+        "  3.  Informe contexto: nomes, siglas e termos técnicos do projeto",
+        "  4.  Selecione o áudio e clique em Iniciar",
+        "  5.  Revise o resultado e exporte o PDF",
+    ]
+    _NOTE = "⚡  Dica: nomeie seus arquivos numericamente para manter a ordem  (Reunião 1, Reunião 2…)"
+
+    def __init__(self, parent, app: "EscribaApp"):
+        super().__init__(parent, fg_color="transparent")
+        self.app = app
+        self._pending: list = []
+        self._build()
+
+    def on_show(self):
+        self._cancel()
+        self._reset()
+        self._schedule(200, self._type_title, 0)
+
+    def _build(self):
+        ctk.CTkButton(
+            self, text="Pular  →", width=82, height=26,
+            font=ctk.CTkFont(size=11),
+            fg_color="transparent", border_width=0,
+            text_color="gray", hover_color=PURPLE_DIM,
+            command=self._enter,
+        ).place(relx=1.0, rely=0.0, anchor="ne", x=-18, y=14)
+
+        body = ctk.CTkFrame(self, fg_color="transparent")
+        body.place(relx=0.5, rely=0.5, anchor="center")
+
+        self.lbl_title = ctk.CTkLabel(
+            body, text="",
+            font=ctk.CTkFont(size=56, weight="bold"),
+            text_color=PURPLE)
+        self.lbl_title.pack(pady=(0, 8))
+
+        self.lbl_tagline = ctk.CTkLabel(
+            body, text="",
+            font=ctk.CTkFont(size=13), text_color="gray")
+        self.lbl_tagline.pack(pady=(0, 18))
+
+        self.lbl_pipeline = ctk.CTkLabel(
+            body, text="",
+            font=ctk.CTkFont(size=13, weight="bold"))
+        self.lbl_pipeline.pack(pady=(0, 22))
+
+        ctk.CTkFrame(body, height=1, fg_color=PURPLE_DIM, width=460).pack(pady=(0, 14))
+
+        ctk.CTkLabel(body, text="Como usar o Escriba",
+                     font=ctk.CTkFont(size=12, weight="bold"),
+                     text_color="gray").pack(pady=(0, 6))
+
+        self.tip_labels: list = []
+        for _ in self._TIPS:
+            lbl = ctk.CTkLabel(body, text="",
+                               font=ctk.CTkFont(size=12), anchor="w", justify="left")
+            lbl.pack(fill="x", pady=1)
+            self.tip_labels.append(lbl)
+
+        ctk.CTkFrame(body, height=1, fg_color=PURPLE_DIM, width=460).pack(pady=(18, 10))
+
+        self.lbl_note = ctk.CTkLabel(
+            body, text="",
+            font=ctk.CTkFont(size=11), text_color="gray",
+            wraplength=460, justify="center")
+        self.lbl_note.pack(pady=(0, 22))
+
+        self.btn_enter = ctk.CTkButton(
+            body, text="Começar  →", width=180, height=44,
+            font=ctk.CTkFont(size=14, weight="bold"),
+            fg_color=PURPLE, hover_color=PURPLE_HOV,
+            command=self._enter, state="disabled")
+        self.btn_enter.pack()
+
+        ctk.CTkLabel(self, text="Escriba v6.0  ·  Forge by Lucas Costa Nogueira",
+                     font=ctk.CTkFont(size=10), text_color="gray").place(
+            relx=0.5, rely=1.0, anchor="s", y=-12)
+
+    def _reset(self):
+        self.lbl_title.configure(text="")
+        self.lbl_tagline.configure(text="")
+        self.lbl_pipeline.configure(text="")
+        self.lbl_note.configure(text="")
+        self.btn_enter.configure(state="disabled")
+        for lbl in self.tip_labels:
+            lbl.configure(text="")
+
+    def _schedule(self, delay: int, fn, *args):
+        aid = self.after(delay, fn, *args) if args else self.after(delay, fn)
+        self._pending.append(aid)
+
+    def _cancel(self):
+        for aid in self._pending:
+            try:
+                self.after_cancel(aid)
+            except Exception:
+                pass
+        self._pending.clear()
+
+    def _type_title(self, i: int):
+        self.lbl_title.configure(text=self._TITLE[:i])
+        if i < len(self._TITLE):
+            self._schedule(90, self._type_title, i + 1)
+        else:
+            self._schedule(350, self._reveal_tagline)
+
+    def _reveal_tagline(self):
+        self.lbl_tagline.configure(text=self._TAGLINE)
+        self._schedule(300, self._reveal_pipeline)
+
+    def _reveal_pipeline(self):
+        self.lbl_pipeline.configure(text=self._PIPELINE)
+        self._schedule(350, self._reveal_tip, 0)
+
+    def _reveal_tip(self, i: int):
+        if i < len(self.tip_labels):
+            self.tip_labels[i].configure(text=self._TIPS[i])
+            self._schedule(180, self._reveal_tip, i + 1)
+        else:
+            self._schedule(280, self._reveal_note)
+
+    def _reveal_note(self):
+        self.lbl_note.configure(text=self._NOTE)
+        self._schedule(350, self._reveal_button)
+
+    def _reveal_button(self):
+        self.btn_enter.configure(state="normal")
+
+    def _enter(self):
+        self._cancel()
+        self.app.show_frame("projects")
 
 
 # ── Projects Frame ────────────────────────────────────────────────────────────
@@ -740,7 +973,7 @@ class WorkFrame(ctk.CTkFrame):
         self.combo_ollama = ctk.CTkComboBox(
             row, values=OLLAMA_MODELS, width=190,
             button_color=PURPLE, button_hover_color=PURPLE_HOV)
-        self.combo_ollama.set("llama3.2")
+        self.combo_ollama.set("qwen2.5:7b")
         self.combo_ollama.pack(side="left", padx=(0, 28))
 
         ctk.CTkLabel(row, text="Modelo Whisper:", width=130, anchor="w").pack(side="left")
@@ -842,10 +1075,15 @@ class ProcessingFrame(ctk.CTkFrame):
         self.lbl_status.configure(text=(msg[:88] + "…") if len(msg) > 88 else msg)
 
     def _run(self, project, source_type, source_path, ollama_model, whisper_model):
+        t_pipeline = time.time()
         try:
             self._log("🛡️  Pipeline iniciado")
             self._log(f"📁  Fonte: {source_path}")
             self._log("─" * 52)
+            cmd_log("=" * 60)
+            cmd_log(f"PIPELINE START → projeto='{project['name']}' | whisper={whisper_model} | ollama={ollama_model}")
+            cmd_log(f"FONTE → {source_path}")
+            cmd_log("=" * 60)
 
             # Collect audio files
             if source_type == "file":
@@ -870,11 +1108,32 @@ class ProcessingFrame(ctk.CTkFrame):
 
             # Load Whisper once
             self._log(f"📦  Carregando Whisper '{whisper_model}'...")
+            cmd_log(f"WHISPER LOAD → modelo '{whisper_model}'")
+            t_load = time.time()
+            load_done = threading.Event()
+            _model_sizes = {"tiny": "75 MB", "base": "142 MB", "small": "466 MB",
+                            "medium": "1.5 GB", "large": "2.9 GB"}
+            _size_hint = _model_sizes.get(whisper_model, "?")
+
+            def _load_heartbeat():
+                while not load_done.wait(timeout=15):
+                    elapsed = int(time.time() - t_load)
+                    msg = f"⏱️  Carregando '{whisper_model}' (~{_size_hint})... {elapsed}s"
+                    self._log(msg)
+                    cmd_log(msg)
+
+            threading.Thread(target=_load_heartbeat, daemon=True).start()
             try:
                 modelo = whisper.load_model(whisper_model)
-                self._log("✅  Whisper carregado.")
+                load_done.set()
+                elapsed = int(time.time() - t_load)
+                msg = f"✅  Whisper '{whisper_model}' carregado em {elapsed}s"
+                self._log(msg)
+                cmd_log(msg)
             except Exception as e:
+                load_done.set()
                 self._log(f"❌  Falha ao carregar Whisper: {e}")
+                cmd_log(f"WHISPER LOAD ERROR → {e}")
                 return
 
             profile = load_profile(project.get("agent_profile_id", "reuniao"))
@@ -931,14 +1190,21 @@ class ProcessingFrame(ctk.CTkFrame):
                 "out_dir":      out_dir,
             }
 
+            elapsed_total = int(time.time() - t_pipeline)
             self._log("\n" + "═" * 52)
             self._log(f"✅  Concluído! {len(all_results)}/{len(files)} arquivo(s) processado(s).")
+            self._log(f"⏱️  Tempo total do pipeline: {elapsed_total // 60}m{elapsed_total % 60:02d}s")
             self._log("═" * 52)
+            cmd_log("=" * 60)
+            cmd_log(f"PIPELINE DONE → {len(all_results)}/{len(files)} arquivo(s) | tempo total={elapsed_total // 60}m{elapsed_total % 60:02d}s")
+            cmd_log("=" * 60)
 
         except Exception as e:
             import traceback
             self._log(f"\n❌  ERRO FATAL: {e}")
             self._log(traceback.format_exc())
+            cmd_log(f"PIPELINE FATAL ERROR → {e}")
+            cmd_log(traceback.format_exc())
         finally:
             self.after(0, self._done)
 
