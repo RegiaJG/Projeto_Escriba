@@ -2,7 +2,7 @@
 
 # Escriba
 
-### Transcrição, Correção e Sumarização de Áudios com IA 100% Local
+### AI-Powered Audio Transcription, Correction & Summarization — 100% Local
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![Ollama](https://img.shields.io/badge/Ollama-Local%20LLM-black?style=for-the-badge&logoColor=white)](https://ollama.com)
@@ -12,219 +12,219 @@
 
 <br/>
 
-> **Converta reuniões, aulas, consultas, entrevistas e gravações em PDFs organizados com IA especializada — tudo processado localmente, sem custos de API e sem enviar seus dados para a nuvem.**
+> **Convert meetings, classes, consultations, interviews and recordings into organized PDFs with specialized AI — everything processed locally, with no API costs and no data sent to the cloud.**
 
 <br/>
 
-![Pipeline](https://img.shields.io/badge/Áudio%20→%20Whisper%20→%20Ollama%20→%20Revisão%20→%20PDF-7B2FBE?style=flat-square)
+![Pipeline](https://img.shields.io/badge/Audio%20→%20Whisper%20→%20Ollama%20→%20Review%20→%20PDF-7B2FBE?style=flat-square)
 
 </div>
 
 ---
 
-## 📌 Índice
+## 📌 Table of Contents
 
-- [Sobre o Projeto](#-sobre-o-projeto)
-- [Demonstração](#-demonstração)
-- [Funcionalidades](#-funcionalidades)
-- [Pipeline Técnico](#-pipeline-técnico)
-- [Tecnologias Utilizadas](#️-tecnologias-utilizadas)
-- [Pré-requisitos](#-pré-requisitos)
-- [Instalação](#-instalação)
-- [Como Usar](#️-como-usar)
-- [Perfis de Agente](#-perfis-de-agente)
-- [Estrutura do Projeto](#-estrutura-do-projeto)
+- [About the Project](#-about-the-project)
+- [Demo](#-demo)
+- [Features](#-features)
+- [Technical Pipeline](#-technical-pipeline)
+- [Technologies Used](#️-technologies-used)
+- [Prerequisites](#-prerequisites)
+- [Installation](#-installation)
+- [How to Use](#️-how-to-use)
+- [Agent Profiles](#-agent-profiles)
+- [Project Structure](#-project-structure)
 - [Roadmap](#️-roadmap)
-- [Autor](#-autor)
+- [Author](#-author)
 
 ---
 
-## 🧠 Sobre o Projeto
+## 🧠 About the Project
 
-O **Escriba** nasceu de uma necessidade real dentro da startup **Projeto Portal** — um grupo de desenvolvimento de RPG de mesa que realizava reuniões semanais de 2 a 4 horas. Muitos membros não conseguiam participar integralmente ou assistir às gravações por falta de tempo, gerando desalinhamento e perda de informação.
+**Escriba** was born from a real need within the **Projeto Portal** startup — an independent tabletop RPG development group that held weekly meetings lasting 2 to 4 hours. Many members couldn't attend fully or watch recordings afterwards due to time constraints, causing misalignment and information loss.
 
-A ferramenta combina dois modelos de IA rodando **100% na sua máquina**:
+The tool combines two AI models running **100% on your machine**:
 
-- **OpenAI Whisper** — reconhecimento de fala com alta precisão em português
-- **LLM local via Ollama** — sumarização inteligente sem depender de APIs externas
+- **OpenAI Whisper** — high-precision speech recognition in Portuguese
+- **Local LLM via Ollama** — intelligent summarization without relying on external APIs
 
-O resultado é um **PDF profissional** com resumo estruturado e transcrição completa — pronto para compartilhar, arquivar ou consultar. Com o sistema de **perfis de agente** e **aprendizado por correção**, o Escriba se adapta ao vocabulário e às necessidades específicas de cada projeto ao longo do tempo.
+The result is a **professional PDF** with a structured summary and full transcription — ready to share, archive or reference. With the **agent profile system** and **correction-based learning**, Escriba adapts to the vocabulary and specific needs of each project over time.
 
-### Por que isso importa?
+### Why does this matter?
 
-| Abordagem comum | Escriba |
+| Common approach | Escriba |
 |---|---|
-| Envia áudio para servidores externos | ✅ Processamento 100% local |
-| Custos por token / por minuto | ✅ Gratuito após instalação |
-| Dependência de conexão com internet | ✅ Funciona completamente offline |
-| Dados sensíveis expostos a terceiros | ✅ Total privacidade e controle |
-| Agente genérico sem contexto do projeto | ✅ Perfis especializados + contexto customizável |
-| Erros de transcrição sem correção | ✅ Aprendizado por correção manual |
+| Sends audio to external servers | ✅ 100% local processing |
+| Costs per token / per minute | ✅ Free after installation |
+| Requires internet connection | ✅ Works completely offline |
+| Sensitive data exposed to third parties | ✅ Full privacy and control |
+| Generic agent with no project context | ✅ Specialized profiles + customizable context |
+| Transcription errors with no correction | ✅ Correction-based learning |
 
 ---
 
-## 🎬 Demonstração
+## 🎬 Demo
 
-**Tela inicial — Seus Projetos:**
+**Home Screen — Your Projects:**
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│  ESCRIBA                                              + Novo Projeto │
-│  Transcrição & Sumarização de Áudios com IA Local                   │
+│  ESCRIBA                                              + New Project  │
+│  Audio Transcription & Summarization with Local AI                  │
 │─────────────────────────────────────────────────────────────────────│
-│  Seus Projetos                                                       │
+│  Your Projects                                                       │
 │                                                                      │
 │  ┌─────────────────────────────────────────────────────────────┐    │
-│  │  👥  Projeto Portal                              [Abrir →]  │    │
-│  │      Reunião Corporativa  ·  12 tarefas  ·  2026-04-25      │    │
+│  │  👥  Portal Project                              [Open →]   │    │
+│  │      Corporate Meeting  ·  12 tasks  ·  2026-04-25          │    │
 │  └─────────────────────────────────────────────────────────────┘    │
 │  ┌─────────────────────────────────────────────────────────────┐    │
-│  │  📚  Faculdade 2026                              [Abrir →]  │    │
-│  │      Aula / Palestra  ·  5 tarefas  ·  2026-04-20           │    │
+│  │  📚  College 2026                                [Open →]   │    │
+│  │      Class / Lecture  ·  5 tasks  ·  2026-04-20             │    │
 │  └─────────────────────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-**Tela de trabalho — Configuração:**
+**Work Screen — Configuration:**
 ```
-← Projetos   Projeto Portal                              ⚙ Perfis
+← Projects   Portal Project                              ⚙ Profiles
 
-Perfil do Agente:
+Agent Profile:
 ┌──────────────────┐ ┌──────────────────┐ ┌──────────────────┐
-│  👥 Reunião      │ │  🎙️ Entrevista   │ │  📚 Aula         │
-│  Corporativa     │ │  / Podcast       │ │  / Palestra      │
+│  👥 Corporate    │ │  🎙️ Interview    │ │  📚 Class        │
+│  Meeting         │ │  / Podcast       │ │  / Lecture       │
 └──────────────────┘ └──────────────────┘ └──────────────────┘
 ┌──────────────────┐ ┌──────────────────┐ ┌──────────────────┐
-│  ⚖️ Jurídico /  │ │  🏥 Consulta     │ │  ✏️ Personalizado│
-│  Ata             │ │  Médica          │ │                  │
+│  ⚖️ Legal /     │ │  🏥 Medical      │ │  ✏️ Custom       │
+│  Minutes         │ │  Consultation    │ │                  │
 └──────────────────┘ └──────────────────┘ └──────────────────┘
 
-Contexto do Projeto:
+Project Context:
 ┌─────────────────────────────────────────────────────────────┐
-│  Membros: Lucas (PO), Ana (Dev), Pedro (Design).            │
-│  Projeto XPTO. Siglas: PBI = Product Backlog Item.          │
+│  Members: Lucas (PO), Ana (Dev), Pedro (Design).            │
+│  Project XPTO. Acronyms: PBI = Product Backlog Item.        │
 └─────────────────────────────────────────────────────────────┘
 
-Arquivo de Áudio:
-[📄 Arquivo]  [📂 Pasta]  [ reunioes/sprint_abril/ _________ ]
+Audio File:
+[📄 File]  [📂 Folder]  [ meetings/april_sprint/ __________ ]
 
-Modelo Ollama: [ llama3.2 ▼ ]    Modelo Whisper: [ base ▼ ]
+Ollama Model: [ llama3.2 ▼ ]    Whisper Model: [ base ▼ ]
 
-              [ ▶   INICIAR                                   ]
+              [ ▶   START                                     ]
 ```
 
-**Exemplo de PDF gerado:**
+**Example of generated PDF:**
 ```
 Escriba
-Projeto: Projeto Portal  ·  Perfil: Reunião Corporativa  ·  25/04/2026 14:32
+Project: Portal Project  ·  Profile: Corporate Meeting  ·  04/25/2026 14:32
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Resultado
+Result
 
-# Reunião de Planejamento — Sprint de Abril
+# Planning Meeting — April Sprint
 
-📋 Visão Geral
-A reunião tratou do planejamento do sprint de abril com foco na
-entrega do módulo de autenticação e revisão do PBI backlog...
+📋 Overview
+The meeting covered April sprint planning focused on delivering
+the authentication module and reviewing the PBI backlog...
 
-📌 Pontos Principais
-• Definição das histórias de usuário para o sprint
-• Revisão de bugs críticos reportados pelo time de QA
+📌 Key Points
+• Definition of user stories for the sprint
+• Review of critical bugs reported by the QA team
 
-✅ Decisões e Ações
-• Lucas ficou responsável pela revisão do PBI — entrega até dia 30
-• Ana irá implementar o módulo de login
+✅ Decisions & Actions
+• Lucas is responsible for PBI review — deadline April 30
+• Ana will implement the login module
 
-🎯 Próximos Passos
-• Daily às 09h a partir de segunda-feira
+🎯 Next Steps
+• Daily standup at 9am starting Monday
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Transcrição Original (gerada pelo Whisper)
-[transcrição literal do áudio com marcação de possíveis erros...]
+Original Transcription (generated by Whisper)
+[literal audio transcription with possible error markers...]
 ```
 
 ---
 
-## ✨ Funcionalidades
+## ✨ Features
 
-- 🗂️ **Sistema de projetos** — organize seus trabalhos em projetos separados com histórico e configurações individuais
-- 🤖 **Perfis de agente especializados** — 5 perfis prontos (Reunião, Entrevista, Aula, Jurídico, Médico) + perfil personalizável
-- 📝 **Campo de contexto** — alimente o agente com nomes, siglas e termos do seu projeto para reduzir erros
-- 🔁 **Aprendizado por correção** — o agente aprende com suas revisões manuais e melhora a cada sessão
-- ✍️ **Editor de revisão integrado** — revise e corrija o resultado antes de exportar o PDF
-- 🎙️ **Transcrição automática** em português com OpenAI Whisper
-- 🧠 **Sumarização inteligente** com LLM local via Ollama
-- 📄 **Geração de PDF** com resumo estruturado + transcrição completa
-- 🖥️ **Interface gráfica** moderna (CustomTkinter, dark mode, redimensionável)
-- 📄 **Arquivo único ou pasta** — processe um áudio isolado ou uma pasta inteira em sequência
-- 🔒 **100% offline** — nenhum dado é enviado para servidores externos
-- 🎚️ **Configurável** — escolha o modelo Whisper e Ollama pela interface
-- 🎵 **Multi-formato** — `.mp3`, `.wav`, `.m4a`, `.ogg` e `.flac`
-- ⚡ **Otimizado** — modelo Whisper carregado uma única vez por sessão
+- 🗂️ **Project system** — organize your work into separate projects with individual history and settings
+- 🤖 **Specialized agent profiles** — 5 built-in profiles (Meeting, Interview, Class, Legal, Medical) + customizable profile
+- 📝 **Context field** — feed the agent with names, acronyms and terms from your project to reduce errors
+- 🔁 **Correction-based learning** — the agent learns from your manual revisions and improves each session
+- ✍️ **Integrated review editor** — review and correct the output before exporting the PDF
+- 🎙️ **Automatic transcription** in Portuguese with OpenAI Whisper
+- 🧠 **Intelligent summarization** with local LLM via Ollama
+- 📄 **PDF generation** with structured summary + full transcription
+- 🖥️ **Modern GUI** (CustomTkinter, dark mode, resizable window)
+- 📄 **Single file or folder** — process one audio file or an entire folder in sequence
+- 🔒 **100% offline** — no data is sent to external servers
+- 🎚️ **Configurable** — choose Whisper and Ollama models through the interface
+- 🎵 **Multi-format** — `.mp3`, `.wav`, `.m4a`, `.ogg` and `.flac`
+- ⚡ **Optimized** — Whisper model loaded only once per session
 
 ---
 
-## 🔬 Pipeline Técnico
+## 🔬 Technical Pipeline
 
 ```
 ┌───────────────────────────────────────────────────────────────────┐
 │                         ESCRIBA v6.0                              │
 │                                                                   │
 │  ┌──────────┐   ┌──────────────┐   ┌──────────────────────────┐  │
-│  │  Arquivo │   │    Whisper   │   │       Ollama Local        │  │
-│  │  de Áudio│──▶│  Transcrição │──▶│  Perfil + Contexto +     │  │
-│  │          │   │  local PT-BR │   │  Correções anteriores     │  │
+│  │  Audio   │   │   Whisper    │   │       Local Ollama        │  │
+│  │  File    │──▶│ Transcription│──▶│  Profile + Context +     │  │
+│  │          │   │  local PT-BR │   │  Previous corrections     │  │
 │  └──────────┘   └──────────────┘   └────────────┬─────────────┘  │
 │                                                  │                │
 │  ┌──────────────────────────────────────────┐    │                │
 │  │  corrections.json  ◀────────────────────┼────┘                │
-│  │  (aprendizado por correção manual)       │  ▲                  │
+│  │  (manual correction learning)            │  ▲                  │
 │  └──────────────────────────────────────────┘  │                  │
 │                                                 │                  │
 │                              ┌──────────────────┴──────────────┐  │
-│                              │     Editor de Revisão           │  │
-│                              │  [Finalizar] [Corrigir+Salvar]  │  │
+│                              │       Review Editor             │  │
+│                              │  [Finalize] [Correct+Save]      │  │
 │                              └──────────────────┬──────────────┘  │
 │                                                 │                  │
 │                                      ┌──────────▼──────────────┐  │
 │                                      │    ReportLab PDF        │  │
-│                                      │  Resultado + Transcrição│  │
+│                                      │  Result + Transcription │  │
 │                                      └─────────────────────────┘  │
 └───────────────────────────────────────────────────────────────────┘
 ```
 
-### Fluxo de dados
+### Data flow
 
-1. O usuário cria ou seleciona um **projeto** com contexto e perfil de agente
-2. Seleciona um **arquivo único** ou uma **pasta** de áudios
-3. O **Whisper** transcreve o áudio localmente em português
-4. O **prompt** é montado com: persona do perfil + aviso de alucinações + contexto do projeto + correções anteriores + instruções + transcrição
-5. O **Ollama** processa e retorna o resultado estruturado
-6. O usuário revisa no **editor integrado** e pode salvar correções para aprendizado
-7. O **PDF** é exportado com resultado e transcrição originais
+1. The user creates or selects a **project** with context and agent profile
+2. Selects a **single file** or **folder** of audio files
+3. **Whisper** transcribes the audio locally in Portuguese
+4. The **prompt** is assembled with: profile persona + hallucination warning + project context + previous corrections + instructions + transcription
+5. **Ollama** processes and returns the structured result
+6. The user reviews in the **integrated editor** and can save corrections for learning
+7. The **PDF** is exported with the result and original transcription
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## 🛠️ Technologies Used
 
-| Tecnologia | Função | Por quê |
+| Technology | Role | Why |
 |---|---|---|
-| **Python 3.10+** | Linguagem principal | Ecossistema de IA maduro e produtivo |
-| **OpenAI Whisper** | Speech-to-Text | Melhor modelo open-source para PT-BR |
-| **Ollama** | LLM local para sumarização | Privacidade total, zero custo, alta qualidade |
-| **CustomTkinter** | Interface gráfica | UI moderna sem frameworks pesados |
-| **ReportLab Platypus** | Geração de PDF | Controle completo sobre layout e estilos |
-| **difflib** | Detecção de correções | Comparação de texto sem dependências externas |
-| **Requests** | Comunicação HTTP com Ollama | Simples e sem overhead |
+| **Python 3.10+** | Main language | Mature and productive AI ecosystem |
+| **OpenAI Whisper** | Speech-to-Text | Best open-source model for Portuguese |
+| **Ollama** | Local LLM for summarization | Full privacy, zero cost, high quality |
+| **CustomTkinter** | Graphical interface | Modern UI without heavy frameworks |
+| **ReportLab Platypus** | PDF generation | Full control over layout and styles |
+| **difflib** | Correction detection | Text comparison without external dependencies |
+| **Requests** | HTTP communication with Ollama | Simple and low-overhead |
 
 ---
 
-## 📋 Pré-requisitos
+## 📋 Prerequisites
 
-Antes de começar, você precisa ter instalado:
+Before starting, you need to have installed:
 
 - **Python 3.10+** → [python.org](https://python.org)
 - **Ollama** → [ollama.com](https://ollama.com)
-- **FFmpeg** (necessário para o Whisper processar áudios)
+- **FFmpeg** (required for Whisper to process audio)
 
   ```bash
   # Windows (via winget)
@@ -237,27 +237,27 @@ Antes de começar, você precisa ter instalado:
   sudo apt install ffmpeg
   ```
 
-- **Modelo de linguagem** baixado no Ollama:
+- **Language model** downloaded in Ollama:
 
   ```bash
   ollama pull llama3.2
   ```
 
-> **Requisitos de hardware recomendados:**
-> CPU moderna (4+ cores). Mínimo 8 GB de RAM (16 GB recomendado para modelos Whisper maiores).
+> **Recommended hardware requirements:**
+> Modern CPU (4+ cores). Minimum 8 GB RAM (16 GB recommended for larger Whisper models).
 >
-> Para melhor qualidade em análises especializadas (jurídico, médico), recomenda-se modelos maiores como `llama3.1:70b` ou `qwen2.5:72b` via Ollama — exigem GPU ou mais RAM.
+> For better quality on specialized analyses (legal, medical), larger models such as `llama3.1:70b` or `qwen2.5:72b` via Ollama are recommended — these require a GPU or more RAM.
 
 ---
 
-## 🚀 Instalação
+## 🚀 Installation
 
 ```bash
-# 1. Clone o repositório
+# 1. Clone the repository
 git clone https://github.com/RegiaJG/escriba.git
 cd escriba
 
-# 2. Crie e ative um ambiente virtual (recomendado)
+# 2. Create and activate a virtual environment (recommended)
 python -m venv .venv
 
 # Windows
@@ -266,115 +266,115 @@ python -m venv .venv
 # Linux / macOS
 source .venv/bin/activate
 
-# 3. Instale as dependências
+# 3. Install dependencies
 pip install openai-whisper customtkinter reportlab requests
 
-# 4. Inicie o servidor Ollama
+# 4. Start the Ollama server
 ollama serve
 ```
 
 ---
 
-## 🖥️ Como Usar
+## 🖥️ How to Use
 
 ```bash
-# Com o Ollama rodando em segundo plano:
+# With Ollama running in the background:
 python escriba.py
 ```
 
-**Passo a passo:**
+**Step by step:**
 
-1. **Crie ou abra um projeto** na tela inicial
-2. **Escolha um perfil de agente** clicando no card desejado
-3. **Adicione contexto** (opcional, mas recomendado): nomes dos participantes, siglas, termos específicos do seu projeto
-4. **Selecione o áudio**: `📄 Arquivo` para um único arquivo ou `📂 Pasta` para múltiplos
-5. **Configure os modelos** Ollama e Whisper conforme necessário
-6. Clique em **▶ INICIAR** e acompanhe o log em tempo real
-7. Ao concluir: **Finalizar** para exportar diretamente, ou **Revisar Texto** para editar antes de exportar
-8. Se revisado: **Corrigir e Finalizar** salva as diferenças para que o agente aprenda nas próximas tarefas
+1. **Create or open a project** on the home screen
+2. **Choose an agent profile** by clicking the desired card
+3. **Add context** (optional but recommended): participant names, acronyms, project-specific terms
+4. **Select audio**: `📄 File` for a single file or `📂 Folder` for multiple
+5. **Configure models** — Ollama and Whisper as needed
+6. Click **▶ START** and follow the real-time log
+7. When done: **Finalize** to export directly, or **Review Text** to edit before exporting
+8. If reviewed: **Correct and Finalize** saves the differences so the agent learns in future tasks
 
-> 💡 **Dica para múltiplos arquivos:** nomeie os arquivos em ordem numérica para garantir o processamento na sequência correta.
-> Exemplo: `Reunião 1.mp3`, `Reunião 2.mp3`, `Reunião 3.mp3`
+> 💡 **Tip for multiple files:** name files numerically to ensure correct processing order.
+> Example: `Meeting 1.mp3`, `Meeting 2.mp3`, `Meeting 3.mp3`
 
-**Modelos Whisper disponíveis:**
+**Available Whisper models:**
 
-| Modelo | Velocidade | Precisão | Memória |
-|--------|-----------|----------|---------|
-| `tiny`   | ⚡⚡⚡⚡⚡ | ⭐⭐      | ~1 GB   |
-| `base`   | ⚡⚡⚡⚡  | ⭐⭐⭐    | ~1 GB   |
-| `small`  | ⚡⚡⚡    | ⭐⭐⭐⭐  | ~2 GB   |
-| `medium` | ⚡⚡      | ⭐⭐⭐⭐⭐ | ~5 GB   |
-| `large`  | ⚡        | ⭐⭐⭐⭐⭐ | ~10 GB  |
+| Model | Speed | Accuracy | Memory |
+|--------|-------|----------|--------|
+| `tiny`   | ⚡⚡⚡⚡⚡ | ⭐⭐      | ~1 GB  |
+| `base`   | ⚡⚡⚡⚡  | ⭐⭐⭐    | ~1 GB  |
+| `small`  | ⚡⚡⚡    | ⭐⭐⭐⭐  | ~2 GB  |
+| `medium` | ⚡⚡      | ⭐⭐⭐⭐⭐ | ~5 GB  |
+| `large`  | ⚡        | ⭐⭐⭐⭐⭐ | ~10 GB |
 
 ---
 
-## 🤖 Perfis de Agente
+## 🤖 Agent Profiles
 
-O Escriba vem com 5 perfis prontos e 1 perfil personalizável:
+Escriba comes with 5 built-in profiles and 1 customizable profile:
 
-| Perfil | Ideal para | Saída esperada |
+| Profile | Best for | Expected output |
 |---|---|---|
-| 👥 **Reunião Corporativa** | Reuniões de equipe, sprints, alinhamentos | Visão geral, pontos principais, decisões, próximos passos |
-| 🎙️ **Entrevista / Podcast** | Entrevistas, podcasts, conversas gravadas | Tema central, tópicos, insights, conclusões |
-| 📚 **Aula / Palestra** | Aulas, apresentações, palestras | Conceitos-chave, conteúdo estruturado, exemplos |
-| ⚖️ **Jurídico / Ata** | Atas formais, contratos, reuniões jurídicas | Ata formal, deliberações, linguagem técnica |
-| 🏥 **Consulta Médica** | Consultas, anamneses, laudos em áudio | Queixa, histórico, conduta, orientações |
-| ✏️ **Personalizado** | Qualquer uso específico | Definido pelo usuário |
+| 👥 **Corporate Meeting** | Team meetings, sprints, alignments | Overview, key points, decisions, next steps |
+| 🎙️ **Interview / Podcast** | Interviews, podcasts, recorded conversations | Central theme, topics, insights, conclusions |
+| 📚 **Class / Lecture** | Classes, presentations, talks | Key concepts, structured content, examples |
+| ⚖️ **Legal / Minutes** | Formal minutes, contracts, legal meetings | Formal minutes, deliberations, technical language |
+| 🏥 **Medical Consultation** | Consultations, anamneses, audio reports | Complaint, history, conduct, guidance |
+| ✏️ **Custom** | Any specific use case | Defined by the user |
 
-Perfis customizados podem ser criados, editados e excluídos diretamente pela interface em **⚙ Perfis**.
+Custom profiles can be created, edited and deleted directly through the **⚙ Profiles** interface.
 
 ---
 
-## 📁 Estrutura do Projeto
+## 📁 Project Structure
 
 ```
 escriba/
-├── escriba.py                    # Aplicação principal (único arquivo)
-├── profiles/                     # Perfis de agente (JSON)
+├── escriba.py                    # Main application (single file)
+├── profiles/                     # Agent profiles (JSON)
 │   ├── reuniao.json
 │   ├── entrevista.json
 │   ├── aula.json
 │   ├── juridico.json
 │   ├── medico.json
 │   └── personalizado.json
-├── projects/                     # Dados por projeto (criado automaticamente)
-│   └── nome-do-projeto/
-│       ├── project.json          # Configurações e metadados
-│       ├── corrections.json      # Histórico de aprendizado
-│       └── tasks/                # Resultados das tarefas
+├── projects/                     # Per-project data (auto-created)
+│   └── project-name/
+│       ├── project.json          # Settings and metadata
+│       ├── corrections.json      # Learning history
+│       └── tasks/                # Task results
 │           └── 20260425_143022.json
 └── README.md
 ```
 
-> Os diretórios `profiles/` e `projects/` são criados automaticamente na primeira execução.
+> The `profiles/` and `projects/` directories are created automatically on first run.
 
 ---
 
 ## 🗺️ Roadmap
 
-- [x] Transcrição local com Whisper
-- [x] Sumarização com LLM local via Ollama
-- [x] Interface gráfica com CustomTkinter (dark mode)
-- [x] Suporte a múltiplos formatos de áudio
-- [x] Sistema de projetos com histórico
-- [x] Perfis de agente especializados (5 built-in + personalizável)
-- [x] Campo de contexto por projeto
-- [x] Prompt consciente de alucinações do Whisper
-- [x] Editor de revisão integrado pós-processamento
-- [x] Aprendizado por correção manual (few-shot local)
-- [x] Janela redimensionável
-- [ ] Tela inicial animada com apresentação do Escriba
-- [ ] Tutorial interativo de uso integrado à interface
-- [ ] Suporte a modelos maiores para análises especializadas
-- [ ] Detecção automática dos modelos Ollama instalados
-- [ ] Seleção de idioma de transcrição pela interface
-- [ ] Exportação para `.docx` além de `.pdf`
-- [ ] Suporte a vídeos (`.mp4`, `.mkv`) via extração de áudio com FFmpeg
-- [ ] Empacotamento como executável (.exe) com PyInstaller
+- [x] Local transcription with Whisper
+- [x] Summarization with local LLM via Ollama
+- [x] GUI with CustomTkinter (dark mode)
+- [x] Support for multiple audio formats
+- [x] Project system with history
+- [x] Specialized agent profiles (5 built-in + customizable)
+- [x] Per-project context field
+- [x] Whisper hallucination-aware prompting
+- [x] Integrated post-processing review editor
+- [x] Manual correction learning (local few-shot)
+- [x] Resizable window
+- [ ] Animated splash screen / onboarding
+- [ ] Interactive tutorial integrated into the interface
+- [ ] Support for larger models for specialized analyses
+- [ ] Automatic detection of installed Ollama models
+- [ ] Language selection for transcription via interface
+- [ ] Export to `.docx` in addition to `.pdf`
+- [ ] Video support (`.mp4`, `.mkv`) via FFmpeg audio extraction
+- [ ] Packaging as executable (.exe) with PyInstaller
 
 ---
 
-## 👤 Autor
+## 👤 Author
 
 <div align="center">
 
@@ -390,6 +390,6 @@ escriba/
 
 <div align="center">
 
-*Projeto de Extensão Universitária — Descomplica UniAmérica · 2026*
+*University Extension Project — Descomplica UniAmérica · 2026*
 
 </div>
